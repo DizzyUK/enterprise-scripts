@@ -32,18 +32,18 @@ Param(
 )
 
 # Test that we can connect to MS Teams
-$connAttempt = 1
+$connAttempt = 0
 clear-variable testCon -ErrorAction SilentlyContinue
 try { $testCon = Get-CSTenant -ErrorAction Stop }
 catch {
     do {
+        $connAttempt++
         if ($connAttempt -gt $maxConnectionAttempts) {
             write-error "Error occured connecting to MS Teams"
             Exit 2
         }
         Connect-MicrosoftTeams
         $testCon = Get-CSTenant -ErrorAction SilentlyContinue
-        $connAttempt++
     } until ($testCon)
 }
 
